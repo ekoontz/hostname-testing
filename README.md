@@ -94,9 +94,9 @@ Incidentally, the "mac.foofers.org" is from my own localhost-only DNS server:
 
 How to setup a VirtualBox host-only virtual network:
 
-![networks](virtual box networks.png)
+![networks](https://github.com/ekoontz/hostname-testing/blob/master/virtual%20box%20networks.png?raw=true)
 
-![network config](configuring a host-only network.png)
+![network config](https://github.com/ekoontz/hostname-testing/blob/master/configuring%20a%20host-only%20network.png?raw=true)
 
 
 
