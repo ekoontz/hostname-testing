@@ -36,8 +36,9 @@ to step through the hadoop-core unit test
 
 to determine what IP to use to listen on.
 
-I then wrote a simple Java class "HostRelated.java" to help understand what
-was going on with Java's InetAddress class. 
+I then wrote a simple Java class "HostRelated.java"
+(https://github.com/ekoontz/hostname-testing/blob/master/HostRelated.java)
+to help understand what was going on with Java's InetAddress class.
 
 Then, Googling for "java getLocalHost multiple interfaces"
 (http://www.google.com/search?q=java+getLocalHost+multiple+interfaces)
