@@ -5,6 +5,7 @@
 int h_errno;
 
 int main() {
+  //   struct hostent *myhost = gethostbyname("mac.foofers.org");
    struct hostent *myhost = gethostbyname("mac.foofers.org");
 
    printf("HOSTENT INFO:\n");
