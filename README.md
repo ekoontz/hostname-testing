@@ -92,3 +92,12 @@ Incidentally, the "mac.foofers.org" is from my own localhost-only DNS server:
     ;; WHEN: Sun Jun  5 08:12:35 2011
     ;; MSG SIZE  rcvd: 63
 
+How to setup a VirtualBox host-only virtual network:
+
+![networks](virtual box networks.png)
+
+![network config](configuring a host-only network.png)
+
+
+
+
