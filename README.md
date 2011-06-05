@@ -43,21 +43,21 @@ Then, Googling for "java getLocalHost multiple interfaces"
  ended me up here: http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4665037 
 
 Wherein I learned about the rather unintuitively-named system property
-: sun.net.spi.nameservice.provider.1 
+: `sun.net.spi.nameservice.provider.1`
 
-You simply set this to "dns,sun" and your problems go away:
+You simply set this to `dns,sun` and your problems go away:
 
     $ java -Dsun.net.spi.nameservice.provider.1="dns,sun" HostRelated
     Java says your IP is: 192.168.56.1
     Java believes that your host's canonical hostname is : mac.foofers.org
 
-Here's what happens when this system property is set to "sun":
+Here's what happens when this system property is set to `sun`:
 
     $ java -Dsun.net.spi.nameservice.provider.1="sun" HostRelated
     Java says your IP is: 192.168.5.223
     Java believes that your host's canonical hostname is : 192.168.5.223
 
-Based on the above, I conclude that "sun" is the default value, but I
+Based on the above evidence, I conclude that `sun` is the default value, but I
 don't know that for sure.
 
 Incidentally, the "mac.foofers.org" is from my own localhost-only DNS server:
