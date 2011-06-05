@@ -1,14 +1,15 @@
-= Java and multiple network interfaces : (sun.net.spi.nameservice.provider.1 is your friend).
+Java and multiple network interfaces : (sun.net.spi.nameservice.provider.1 is your friend).
+=========
 
 While running Hadoop and HBase on my Macbook, I've often encountered
 problems with hostname resolution. Like most laptop users, I have
 multiple interfaces on my laptop, including the following:
 
--an ethernet port (en0)
--a WiFi interface (en1)
--a VirtualBox Host-only network (vboxnet0)
+* an ethernet port (en0)
+* a WiFi interface (en1)
+* a VirtualBox Host-only network (vboxnet0)
 
-== Ifconfig output
+ifconfig output:
 
     $ ifconfig en1
     en1: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
@@ -30,7 +31,7 @@ one wireless network to another).
 So, how to force Hadoop daemons to listen on vboxnet0? Debugging the
 hadoop-core unit test "TestDNS.java" showed that Hadoop uses :
 
-InetAddress.getLocalHost().getCanonicalHostName() 
+    InetAddress.getLocalHost().getCanonicalHostName() 
 
 to determine what IP to use to listen on.
 
@@ -46,47 +47,46 @@ Wherein I learned about the rather unintuitively-named system property
 
 You simply set this to "dns,sun" and your problems go away:
 
-$ java -Dsun.net.spi.nameservice.provider.1="dns,sun" HostRelated
-Java says your IP is: 192.168.56.1
-Java believes that your host's canonical hostname is : mac.foofers.org
+    $ java -Dsun.net.spi.nameservice.provider.1="dns,sun" HostRelated
+    Java says your IP is: 192.168.56.1
+    Java believes that your host's canonical hostname is : mac.foofers.org
 
 Here's what happens when this system property is set to "sun":
 
-$ java -Dsun.net.spi.nameservice.provider.1="sun" HostRelated
-Java says your IP is: 192.168.5.223
-Java believes that your host's canonical hostname is : 192.168.5.223
+    $ java -Dsun.net.spi.nameservice.provider.1="sun" HostRelated
+    Java says your IP is: 192.168.5.223
+    Java believes that your host's canonical hostname is : 192.168.5.223
 
 Based on the above, I conclude that "sun" is the default value, but I
 don't know that for sure.
 
-The "mac.foofers.org" is from my own localhost-only DNS server:
+Incidentally, the "mac.foofers.org" is from my own localhost-only DNS server:
 
-$ cat /etc/resolv.conf
-#...(snip)..
-nameserver 127.0.0.1
-# ..other (external) nameservers..
+    $ cat /etc/resolv.conf
+    #...(snip)..
+    nameserver 127.0.0.1
+    # ..other (external) nameservers..
+    
+    $ dig @localhost mac.foofers.or
+    
+    ; <<>> DiG 9.6.0-APPLE-P2 <<>> @localhost mac.foofers.org
+    ; (2 servers found)
+    ;; global options: +cmd
+    ;; Got answer:
+    ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 23718
+    ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
+    
+    ;; QUESTION SECTION:
+    ;mac.foofers.org.		IN	A
+    
+    ;; ANSWER SECTION:
+    mac.foofers.org.	3600	IN	A	192.168.56.1
+    
+    ;; AUTHORITY SECTION:
+    foofers.org.		3600	IN	NS	mac.foofers.org.
+    
+    ;; Query time: 0 msec
+    ;; SERVER: 127.0.0.1#53(127.0.0.1)
+    ;; WHEN: Sun Jun  5 08:12:35 2011
+    ;; MSG SIZE  rcvd: 63
 
-$ dig @localhost mac.foofers.org
-
-; <<>> DiG 9.6.0-APPLE-P2 <<>> @localhost mac.foofers.org
-; (2 servers found)
-;; global options: +cmd
-;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 23718
-;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
-
-;; QUESTION SECTION:
-;mac.foofers.org.		IN	A
-
-;; ANSWER SECTION:
-mac.foofers.org.	3600	IN	A	192.168.56.1
-
-;; AUTHORITY SECTION:
-foofers.org.		3600	IN	NS	mac.foofers.org.
-
-;; Query time: 0 msec
-;; SERVER: 127.0.0.1#53(127.0.0.1)
-;; WHEN: Sun Jun  5 08:12:35 2011
-;; MSG SIZE  rcvd: 63
-
-$
