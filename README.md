@@ -28,8 +28,9 @@ Host-only network, which is useful for security and for avoiding
 physical network-related glitches (for example, moving my laptop from
 one wireless network to another).
 
-So, how to force Hadoop daemons to listen on vboxnet0? Debugging the
-hadoop-core unit test "TestDNS.java" showed that Hadoop uses :
+So, how to force Hadoop daemons to listen on vboxnet0? Using IntelliJ
+to step through the hadoop-core unit test
+`org.apache.hadoop.net.TestDNS` showed that Hadoop uses :
 
     InetAddress.getLocalHost().getCanonicalHostName() 
 
