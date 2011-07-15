@@ -69,7 +69,7 @@ Incidentally, the "mac.foofers.org" is from my own localhost-only DNS server:
     nameserver 127.0.0.1
     # ..other (external) nameservers..
     
-    $ dig @localhost mac.foofers.or
+    $ dig @localhost mac.foofers.org
     
     ; <<>> DiG 9.6.0-APPLE-P2 <<>> @localhost mac.foofers.org
     ; (2 servers found)
